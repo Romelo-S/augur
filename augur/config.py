@@ -28,7 +28,9 @@ linux_badge_worker_p = randint(47000,47499)
 gitlab_issues_worker_p = randint(47500,47999)
 release_worker_p = randint(56000, 56499)
 gitlab_merge_request_worker_p = randint(56500, 56999)
-deps_worker_p = randint(58001, 58499) 
+deps_worker_p = randint(58001, 58499)
+deps_libyear_worker_p = randint(58500, 58999)
+#contributor_interface_p = randint(47000,47499) 
 main_port = 5000 #randint(5001,5300) 
 
 
@@ -58,14 +60,6 @@ default_config = {
                 "repo_group_id": 0
             },
             "jobs": [
-                {
-                    "delay": 150000,
-                    "given": [
-                        "git_url"
-                    ],
-                    "model": "deps",
-                    "repo_group_id": 0
-                },
                 {
                     "delay": 150000,
                     "given": [
@@ -136,7 +130,7 @@ default_config = {
                     "repo_group_id": 0
                 },
                 {
-                    "delay": 150000,
+                    "delay": 86400,
                     "given": [
                         "repo_group"
                     ],
@@ -232,6 +226,15 @@ default_config = {
                     "repo_group_id": 0
                 },
                 {
+                    "delay": 10000,
+                    "given": [
+                        "git_url"
+                    ],
+                    "model": "repo_library_experience",
+                    "repo_group_id": 0
+
+                },
+                {
                     "all_focused": 1,
                     "delay": 150000,
                     "given": [
@@ -246,6 +249,14 @@ default_config = {
                         "git_url"
                     ],
                     "model": "deps",
+                    "repo_group_id": 0
+                },
+                {
+                    "delay": 150000,
+                    "given": [
+                        "git_url"
+                    ],
+                    "model": "deps_libyear",
                     "repo_group_id": 0
                 }
             ]
@@ -373,6 +384,11 @@ default_config = {
                     "port": deps_worker_p,
                     "switch": 0,
                     "workers": 1
+                },
+                "deps_libyear_worker": {
+                    "port": deps_libyear_worker_p,
+                    "switch": 0,
+                    "workers": 1
                 }
         },
         "Facade": {
@@ -395,8 +411,8 @@ default_config = {
             "cache_expire": "3600",
             "host": "0.0.0.0",
             "port": main_port,
-            "workers": 4,
-            "timeout": 60
+            "workers": 12,
+            "timeout": 60000
         },
         "Frontend": {
             "host": "0.0.0.0",

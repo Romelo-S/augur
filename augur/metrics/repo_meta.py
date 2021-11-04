@@ -200,15 +200,27 @@ def cii_best_practices_badge(self, repo_group_id, repo_id=None):
     :param repo_id: The repository's repo_id, defaults to None
     :return: CII best parctices badge level
     """
-    cii_best_practices_badge_SQL = s.sql.text("""
-        SELECT data
-        FROM augur_data.repo_badging
-        WHERE repo_id = :repo_id
-        ORDER BY created_at DESC
-        LIMIT 1
-    """)
+    if not repo_id:
+        cii_best_practices_badge_SQL = s.sql.text("""
+            SELECT data
+            FROM augur_data.repo_badging
+            WHERE repo_id IN (SELECT repo_id FROM repo WHERE repo_group_id = :repo_group_id)
+            ORDER BY created_at DESC
+            LIMIT 1
+        """)
+    else:
+        cii_best_practices_badge_SQL = s.sql.text("""
+            SELECT data
+            FROM augur_data.repo_badging
+            WHERE repo_id = :repo_id
+            ORDER BY created_at DESC
+            LIMIT 1
+        """)
 
     raw_df = pd.read_sql(cii_best_practices_badge_SQL, self.database, params={'repo_id': repo_id})
+
+    if len(raw_df) == 0:
+        return []
 
     badging_data = raw_df.iloc[0,0][0]
 
@@ -450,13 +462,13 @@ def license_coverage(self, repo_group_id, repo_id=None):
                 packages_files,
                 repo
             WHERE packages.name = repo.repo_name
-            and repo_id = :repo_id
+            and repo.repo_id = :repo_id
             and packages.package_id = packages_files.package_id
             and packages_files.file_id = files_licenses.file_id
             GROUP BY packages.name) a, (SELECT packages.name as name, count(packages_files.file_id) as total
             FROm packages, repo, packages_files
             WHERE packages.name = repo.repo_name
-            and repo_id = :repo_id
+            and repo.repo_id = :repo_id
             AND packages.package_id = packages_files.package_id
             GROUP BY packages.name
             )b
@@ -511,13 +523,13 @@ def license_count(self, repo_group_id, repo_id=None):
                 packages_files,
                 repo
             WHERE packages.name = repo.repo_name
-            and repo_id = :repo_id
+            and repo.repo_id = :repo_id
             and packages.package_id = packages_files.package_id
             and packages_files.file_id = files_licenses.file_id
             GROUP BY packages.name) a, (SELECT packages.name as name, count(packages_files.file_id) as total
             FROm packages, repo, packages_files
             WHERE packages.name = repo.repo_name
-            and repo_id = :repo_id
+            and repo.repo_id = :repo_id
             AND packages.package_id = packages_files.package_id
             GROUP BY packages.name
             )b
@@ -903,10 +915,10 @@ def average_weekly_commits(self, repo_group_id=None, repo_id=None, calendar_year
 
     extra_and = "AND repo.repo_group_id = :repo_group_id" if repo_group_id and not repo_id else "AND repo.repo_id = :repo_id" if repo_group_id and repo_id else ""
     average_weekly_commits_sql = s.sql.text("""
-        SELECT repo.repo_id, repo.repo_name, year, sum(patches)/52 AS average_weekly_commits 
+        SELECT repo.repo_id, repo.repo_name, year, sum(patches)/52 AS average_weekly_commits
         FROM dm_repo_annual, repo
         WHERE YEAR = :calendar_year -- or other year
-        AND dm_repo_annual.repo_id = repo.repo_id 
+        AND dm_repo_annual.repo_id = repo.repo_id
         {}
         GROUP BY repo.repo_id, repo.repo_name, YEAR
         ORDER BY repo_name
@@ -1049,7 +1061,7 @@ def aggregate_summary(self, repo_group_id, repo_id=None, begin_date=None, end_da
                     SELECT DISTINCT issue_events.issue_id
                     FROM issue_events JOIN issues ON issues.issue_id = issue_events.issue_id
                     WHERE action = 'merged'
-                    AND repo_id = :repo_id
+                    AND issues.repo_id = :repo_id
                     AND issue_events.created_at BETWEEN :begin_date AND :end_date
                 ) a
             ) AS merged_count,
