@@ -95,6 +95,7 @@ Steps:
    7. If you want to make sure that the changes you’ve made to the frontend code will compile into a distributable form before deploying them onto your server, you can create a production build.  To do this, run the following command (it may take up to a few minutes to complete):  `npm run build`
    
    This command will also create a “dist” directory within the “frontend” directory.
+   
    8. To see the frontend locally, run the following command:  `npm run serve`
 
    This command creates a local web server that is hardcoded to not be serviceable on a public domain; it is designed exclusively for local development.  Once this command is  executed, you should see something similar to the following image:
