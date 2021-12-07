@@ -53,6 +53,9 @@ but we are actively adding to it all the time. If you get stuck, please feel fre
 
 ## Augur’s Frontend
 
+![image](https://user-images.githubusercontent.com/40612091/144942651-27cae4e6-971b-4e39-a728-9c9c97a3ec54.png)
+
+
 How to Access the Augur Frontend
 
 <u>Requirements:</u>
