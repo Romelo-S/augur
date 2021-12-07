@@ -53,16 +53,16 @@ but we are actively adding to it all the time. If you get stuck, please feel fre
 
 ## Augur’s Frontend
 
-How to Access the Augur Frontend
+#### How to Access the Augur Frontend
 
-Requirements:
+**Requirements:**
    - A server
    - A fork of the Augur repository (https://github.com/chaoss/augur) on your local machine
 
-To make changes to the Augur frontend code:
+**To make changes to the Augur frontend code:**
 In your fork of Augur, go to `frontend → src` to see the various directories and TypeScript files for the frontend.  The majority of the code is found in the files within the `frontend → src → views` directory.
 
-Steps:
+**Steps:**
    1. In your command line, go to the directory of your fork of Augur.
    2. From the Augur directory, go into the directory named “frontend”. If there is not already a file named “frontend.config.json” in this directory, create one and make its content the following:
 ```
