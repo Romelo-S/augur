@@ -52,6 +52,8 @@ but we are actively adding to it all the time. If you get stuck, please feel fre
 ## Collecting Data
 
 ## Augur’s Frontend 
+![image](https://user-images.githubusercontent.com/40612091/144942417-05a9c166-bc07-46e4-80dc-a1de09fa02e7.png)
+
 
 ## Command Line Interface
 
