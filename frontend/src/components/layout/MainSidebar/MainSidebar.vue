@@ -90,10 +90,14 @@
 </template>
 
 <script lang="ts">
+
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import {mapActions, mapGetters, mapMutations} from "vuex";
   import TabSelector from "../../TabSelector.vue";
+  declare var require: any
+
+
   @Component({
     props: {
       hideLogoText: {
@@ -119,13 +123,17 @@
   })
   export default class MainSidebar extends Vue {
     sidebarVisible:boolean = false;
+  
     items =  [
       {
         title: 'Insights',
         to: {
           name: 'home',
         },
-        htmlBefore: '<i class="material-icons">trending_up</i>', //vertical_split
+        // waterfall_chart
+        htmlBefore: '<img src="https://www.pngfind.com/pngs/m/1-16561_business-growth-chart-png-transparent-images-graph-clipart.png" style="width:25px;height:17px;">',
+        // htmlBefore: '<img src="/img/logo.2f4761bb.png" style="width:50px;height:17px;">',
+        //htmlBefore: '<i class="material-icons">waterfall_chart</i>', //vertical_split
         htmlAfter: '',
       }, {
         title: 'Repos',
@@ -133,7 +141,9 @@
           name: 'group_overview',
           params: { }
         },
-        htmlBefore: '<i class="material-icons">table_chart</i>',
+        //supervised_user_circle
+
+        htmlBefore: '<i class="material-icons">supervised_user_circle</i>',
         htmlAfter: '',
       },
       // {
@@ -149,7 +159,8 @@
         to: {
           name: 'repo_groups',
         },
-        htmlBefore: '<i class="material-icons">group_work</i>',
+        // group
+        htmlBefore: '<i class="material-icons">group</i>',
         htmlAfter: '',
       },
       // {
